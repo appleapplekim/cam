@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>웹 카메라 앱</title>
+</head>
+<body>
+    <h1>카메라 앱</h1>
+    <video id="camera" autoplay></video>
+    <button id="captureButton">사진 촬영</button>
+    <canvas id="canvas"></canvas>
+    <img id="capturedImage" alt="Captured Image">
+    
+    <script>
+        const camera = document.getElementById('camera');
+        const captureButton = document.getElementById('captureButton');
+        const canvas = document.getElementById('canvas');
+        const capturedImage = document.getElementById('capturedImage');
+
+        // 미디어 장치에 접근하여 카메라 활성화
+        navigator.mediaDevices
+            .getUserMedia({ video: true })
+            .then((stream) => {
+                camera.srcObject = stream;
+            })
+            .catch((error) => {
+                console.error('카메라를 활성화하지 못했습니다.', error);
+            });
+
+        // 사진 촬영 버튼 클릭 시 이미지 캡처
+        captureButton.addEventListener('click', () => {
+            canvas.width = camera.videoWidth;
+            canvas.height = camera.videoHeight;
+            canvas.getContext('2d').drawImage(camera, 0, 0);
+            capturedImage.src = canvas.toDataURL('image/png');
+        });
+    </script>
+</body>
+</html>
